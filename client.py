@@ -14,7 +14,7 @@ def connect_to_server():
     while True:
         try:
             client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client.connect(('localhost', 8080)) # ---- Підключення до сервера
+            client.connect(('192.168.0.118', 8080)) # ---- Підключення до сервера
             buffer = ""
             game_state = {}
             my_id = int(client.recv(24).decode())
@@ -40,10 +40,14 @@ def receive():
 # --- ШРИФТИ ---
 font_win = font.Font(None, 72)
 font_main = font.Font(None, 36)
+
+font_win=font.Font("ping-pong/WebPlus IBM MDA.zip")
 # --- ЗОБРАЖЕННЯ ----
-
+background = transform.scale(image.load('pharaon.jpg'),(WIDTH,HEIGHT))
 # --- ЗВУКИ ---
-
+mixer.init()
+mixer.music.load("ping-pong/trips-to-eutopia-274901.mp3")
+mixer.play(-1)
 # --- ГРА ---
 game_over = False
 winner = None
@@ -56,14 +60,15 @@ while True:
             exit()
 
     if "countdown" in game_state and game_state["countdown"] > 0:
-        screen.fill((0, 0, 0))
+        #screen.fill((0, 0, 0))
+        screen.blit(background,(0,0))
         countdown_text = font.Font(None, 72).render(str(game_state["countdown"]), True, (255, 255, 255))
         screen.blit(countdown_text, (WIDTH // 2 - 20, HEIGHT // 2 - 30))
         display.update()
         continue  # Не малюємо гру до завершення відліку
 
     if "winner" in game_state and game_state["winner"] is not None:
-        screen.fill((20, 20, 20))
+        #screen.fill((20, 20, 20))
 
         if you_winner is None:  # Встановлюємо тільки один раз
             if game_state["winner"] == my_id:
